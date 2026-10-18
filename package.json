@@ -1,0 +1,31 @@
+{
+  "name": "hydrobuddy-bd-native",
+  "version": "1.0.0",
+  "private": true,
+  "description": "HydroBuddy BD — Native Cross-Platform (iOS, Android & Web) Hydroponic Nutrient Calculator & Bangladesh Farmer Guide",
+  "license": "GPL-3.0-or-later",
+  "main": "index.js",
+  "scripts": {
+    "start": "expo start",
+    "android": "expo run:android",
+    "ios": "expo run:ios",
+    "web": "expo start --web",
+    "build:web": "expo export --platform web",
+    "prebuild": "expo prebuild",
+    "icons": "node scripts/make-icons.js"
+  },
+  "dependencies": {
+    "@expo/metro-runtime": "~4.0.1",
+    "@react-native-async-storage/async-storage": "1.23.1",
+    "expo": "~52.0.37",
+    "expo-status-bar": "~2.0.1",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "react-native": "0.76.7",
+    "react-native-web": "~0.19.13"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.25.2",
+    "sharp": "^0.33.5"
+  }
+}
