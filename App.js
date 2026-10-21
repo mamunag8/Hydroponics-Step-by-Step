@@ -11,7 +11,6 @@ import {
   StatusBar as RNStatusBar
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { StatusBar } from 'expo-status-bar';
 
 import HYDROBUDDY_DB from './src/data/hydrobuddy-db';
 import I18N from './src/engine/i18n';
@@ -28,6 +27,38 @@ import CropsScreen from './src/screens/CropsScreen';
 import DoctorScreen from './src/screens/DoctorScreen';
 import AcademyScreen from './src/screens/AcademyScreen';
 import BusinessScreen from './src/screens/BusinessScreen';
+
+class AppErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false, errorMsg: '' };
+  }
+  static getDerivedStateFromError(error) {
+    return { hasError: true, errorMsg: String((error && error.message) || error || 'Error') };
+  }
+  componentDidCatch() {}
+  render() {
+    if (this.state.hasError) {
+      return (
+        <View style={{ padding: 20, backgroundColor: '#ffffff', borderRadius: 12, margin: 12 }}>
+          <Text style={{ fontSize: 16, fontWeight: '700', color: '#14532d', marginBottom: 8 }}>
+            Hydroponics Step by Step
+          </Text>
+          <Text style={{ fontSize: 13, color: '#374151', marginBottom: 12 }}>
+            {this.state.errorMsg}
+          </Text>
+          <TouchableOpacity
+            onPress={() => this.setState({ hasError: false, errorMsg: '' })}
+            style={{ backgroundColor: '#16a34a', padding: 10, borderRadius: 8, alignSelf: 'flex-start' }}
+          >
+            <Text style={{ color: '#ffffff', fontWeight: '700' }}>Reload View</Text>
+          </TouchableOpacity>
+        </View>
+      );
+    }
+    return this.props.children;
+  }
+}
 
 const STORAGE_KEY = '@hydrobuddy_bd_native_state_v1';
 
@@ -169,8 +200,9 @@ export default function App() {
   const isRtl = (allLangs[I18N.getLang()]?.dir || 'ltr') === 'rtl';
 
   return (
-    <SafeAreaView style={[styles.safeRoot, isRtl && { direction: 'rtl' }]}>
-      <StatusBar style="light" backgroundColor={COLORS.g900} />
+    <AppErrorBoundary>
+      <SafeAreaView style={[styles.safeRoot, Platform.OS === 'web' && isRtl && { direction: 'rtl' }]}>
+        <RNStatusBar barStyle="light-content" backgroundColor={COLORS.g900} />
 
       {/* Top Native App Bar */}
       <View style={styles.header}>
@@ -363,7 +395,8 @@ export default function App() {
           <Text style={styles.toastTxt}>{toastMsg}</Text>
         </View>
       ) : null}
-    </SafeAreaView>
+      </SafeAreaView>
+    </AppErrorBoundary>
   );
 }
 

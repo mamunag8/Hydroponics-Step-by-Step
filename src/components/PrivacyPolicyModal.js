@@ -10,6 +10,7 @@ import { COLORS, Btn, Badge } from './ui';
 import I18N from '../engine/i18n';
 
 export default function PrivacyPolicyModal({ visible, onClose }) {
+  if (!visible) return null;
   const isBn = I18N.getLang() === 'bn';
 
   return (

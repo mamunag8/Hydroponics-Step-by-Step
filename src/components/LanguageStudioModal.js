@@ -84,6 +84,8 @@ export default function LanguageStudioModal({ visible, onClose, onLanguageUpdate
     } catch (e) {}
   };
 
+  if (!visible) return null;
+
   return (
     <Modal visible={visible} animationType="slide" transparent onRequestClose={onClose}>
       <View style={uiStyles.modalBackdrop}>

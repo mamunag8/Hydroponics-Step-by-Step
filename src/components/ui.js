@@ -18,6 +18,7 @@ export const COLORS = {
   g100: '#dcfce7',
   g50: '#f0fdf4',
   ink: '#1f2937',
+  text: '#1f2937',
   muted: '#6b7280',
   line: '#e5e7eb',
   bg: '#f3f6f4',
@@ -140,42 +141,44 @@ export function SelectField({ label, value, options, onChange, style }) {
         <Text style={styles.selectArrow}>▾</Text>
       </TouchableOpacity>
 
-      <Modal visible={open} transparent animationType="fade" onRequestClose={() => setOpen(false)}>
-        <TouchableOpacity
-          style={styles.modalBackdrop}
-          activeOpacity={1}
-          onPress={() => setOpen(false)}
-        >
-          <View style={styles.modalSheet}>
-            <View style={styles.modalHeader}>
-              <Text style={styles.h3}>{label || 'Select'}</Text>
-              <TouchableOpacity onPress={() => setOpen(false)}>
-                <Text style={styles.closeBtn}>✕</Text>
-              </TouchableOpacity>
+      {open ? (
+        <Modal visible={open} transparent animationType="fade" onRequestClose={() => setOpen(false)}>
+          <TouchableOpacity
+            style={styles.modalBackdrop}
+            activeOpacity={1}
+            onPress={() => setOpen(false)}
+          >
+            <View style={styles.modalSheet}>
+              <View style={styles.modalHeader}>
+                <Text style={styles.h3}>{label || 'Select'}</Text>
+                <TouchableOpacity onPress={() => setOpen(false)}>
+                  <Text style={styles.closeBtn}>✕</Text>
+                </TouchableOpacity>
+              </View>
+              <ScrollView style={{ maxHeight: 420 }}>
+                {options.map(opt => {
+                  const selected = opt.value === value;
+                  return (
+                    <TouchableOpacity
+                      key={String(opt.value)}
+                      style={[styles.optionRow, selected && styles.optionRowSelected]}
+                      onPress={() => {
+                        onChange(opt.value);
+                        setOpen(false);
+                      }}
+                    >
+                      {opt.group ? <Text style={styles.optionGroupTag}>{opt.group}</Text> : null}
+                      <Text style={[styles.optionTxt, selected && styles.optionTxtSelected]}>
+                        {opt.label}
+                      </Text>
+                    </TouchableOpacity>
+                  );
+                })}
+              </ScrollView>
             </View>
-            <ScrollView style={{ maxHeight: 420 }}>
-              {options.map(opt => {
-                const selected = opt.value === value;
-                return (
-                  <TouchableOpacity
-                    key={String(opt.value)}
-                    style={[styles.optionRow, selected && styles.optionRowSelected]}
-                    onPress={() => {
-                      onChange(opt.value);
-                      setOpen(false);
-                    }}
-                  >
-                    {opt.group ? <Text style={styles.optionGroupTag}>{opt.group}</Text> : null}
-                    <Text style={[styles.optionTxt, selected && styles.optionTxtSelected]}>
-                      {opt.label}
-                    </Text>
-                  </TouchableOpacity>
-                );
-              })}
-            </ScrollView>
-          </View>
-        </TouchableOpacity>
-      </Modal>
+          </TouchableOpacity>
+        </Modal>
+      ) : null}
     </View>
   );
 }
