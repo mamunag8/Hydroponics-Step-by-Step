@@ -25,7 +25,9 @@ export default function WaterScreen({ appState, updateAppState, onNavigateTab, s
   const [rawAlk, setRawAlk] = useState(String(activeWater.kh || 115));
   const [targetAlk, setTargetAlk] = useState('30');
   const [acidId, setAcidId] = useState('h3po4_85');
-  const [volL, setVolL] = useState('100');
+  const [volL, setVolL] = useState(() =>
+    String(Solver.getEffectiveVolumeLiters(appState.params) || 100)
+  );
 
   const t = (k, f) => I18N.t(k, f);
   const fmt = (v, d = 2) => I18N.fmtNum(v, d);

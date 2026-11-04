@@ -146,7 +146,20 @@ export default function App() {
             I18N.setUseNativeDigits(parsed.useNativeDigits);
           }
           if (parsed && parsed.state) {
-            setAppState(prev => Object.assign({}, prev, parsed.state));
+            setAppState(prev => {
+              const merged = Object.assign({}, prev, parsed.state);
+              try {
+                const res = Solver.solveFormulationToWeights(
+                  merged.targets,
+                  merged.selectedSalts,
+                  merged.params,
+                  merged.water
+                );
+                merged.result = res;
+                merged.weights = res ? res.weights : merged.weights;
+              } catch (err) {}
+              return merged;
+            });
           }
         }
       } catch (e) {}
